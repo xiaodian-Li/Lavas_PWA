@@ -17,15 +17,11 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import {mapState} from 'vuex'
 export default {
   name: 'detail-_id',
-  async asyncData () {
-    let result = await axios(`https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%202151849&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys`);
-    let condition = result.data.query.results.channel.item.condition;
-    console.log(`Weather of Shanghai: ${condition.text}, ${condition.temp}°F`);
-  },
-  metaInfo () {
+    metaInfo () {
     return {
       title: `Lavas Sample Detail ${this.$route.params.id}`,
       titleTemplate: '%s - Lavas',
@@ -34,6 +30,22 @@ export default {
           {name: 'description', content: `Lavas Sample Detail ${this.$route.params.id}`}
       ]
     }
+  },
+  // async asyncData () {
+  //   let result = await axios(`https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%202151849&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys`);
+  //   let condition = result.data.query.results.channel.item.condition;
+  //   console.log(`Weather of Shanghai: ${condition.text}, ${condition.temp}°F`);
+  // },
+  async asyncData({store, route}) {
+    await store.dispatch('detail/setWeather', {woeid: 2151849}) // 调用vuex的dispatch告知 store 发送请求获取数据
+  },
+  computed: {
+    ...mapState('detail', [ // 将weather挂在到this中
+      'weather'
+    ])
+  },
+  created () {
+    console.log(`Weather of Shanghai: ${this.weather.text}, ${this.weather.temp}°F`)
   }
 }
 </script>
