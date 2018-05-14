@@ -21,7 +21,7 @@ if (process.argv.length >= 3 && process.argv[2] !== 'dev') {
  * @see https://github.com/chimurai/http-proxy-middleware
  * @type {Object}
  */
-var proxyTable = {
+var proxyTable = { // 代理
     // proxy table example
     // '/api': {
     //     target: 'https://lavas.baidu.com',
